@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function OnboardingPage() {
   return (
     <main className="grid min-h-screen place-items-center bg-base-200 p-4">
@@ -24,6 +26,9 @@ export default function OnboardingPage() {
           <button type="button" className="btn btn-primary mt-2">
             Simpan Setup
           </button>
+          <Link className="btn btn-outline" href="/formulir">
+            Masuk ke Formulir
+          </Link>
 
           <p className="mt-6 text-center text-xs text-base-content/50">
             EAS Creative Studio - https://eas.biz.id

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function LoginPage() {
   return (
     <main className="grid min-h-screen place-items-center bg-base-200 p-4">
@@ -13,6 +15,12 @@ export default function LoginPage() {
           <button type="button" className="btn btn-primary mt-2">
             Masuk
           </button>
+          <Link className="btn btn-outline" href="/formulir">
+            Lanjut ke Dashboard Dev-Test
+          </Link>
+          <Link className="text-center text-sm link" href="/onboarding">
+            Setup awal aplikasi
+          </Link>
           <p className="mt-6 text-center text-xs text-base-content/50">
             EAS Creative Studio - https://eas.biz.id
           </p>
