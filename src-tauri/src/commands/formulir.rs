@@ -14,8 +14,8 @@ pub fn commit_riwayat_formulir_cmd(
     state: State<AppState>,
     payload: CommitRiwayatPayload,
 ) -> AppResult<CommitRiwayatResponse> {
-    let conn = state.db.lock();
-    commit_riwayat_formulir(&conn, payload)
+    let mut conn = state.db.lock();
+    commit_riwayat_formulir(&mut conn, payload)
 }
 
 #[tauri::command]

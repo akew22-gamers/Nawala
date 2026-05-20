@@ -36,10 +36,10 @@ pub struct CommitRiwayatResponse {
 
 /// Commit form submission to immutable history
 pub fn commit_riwayat_formulir(
-    conn: &Connection,
+    conn: &mut Connection,
     payload: CommitRiwayatPayload,
 ) -> AppResult<CommitRiwayatResponse> {
-    let tx = conn.unchecked_transaction()?;
+    let tx = conn.transaction()?;
 
     // Insert into riwayat_formulir
     tx.execute(
@@ -246,7 +246,7 @@ mod tests {
 
     #[test]
     fn test_commit_riwayat_formulir() {
-        let conn = setup_test_db();
+        let mut conn = setup_test_db();
 
         let payload = CommitRiwayatPayload {
             kode_formulir: "SKCK".to_string(),
@@ -267,14 +267,14 @@ mod tests {
             }],
         };
 
-        let result = commit_riwayat_formulir(&conn, payload).unwrap();
+        let result = commit_riwayat_formulir(&mut conn, payload).unwrap();
         assert_eq!(result.riwayat_id, 1);
         assert_eq!(result.nomor_surat, Some("001/SKCK/2026".to_string()));
     }
 
     #[test]
     fn test_list_riwayat() {
-        let conn = setup_test_db();
+        let mut conn = setup_test_db();
 
         // Insert test data
         let payload = CommitRiwayatPayload {
@@ -293,7 +293,7 @@ mod tests {
             subjek: vec![],
         };
 
-        commit_riwayat_formulir(&conn, payload).unwrap();
+        commit_riwayat_formulir(&mut conn, payload).unwrap();
 
         let records = list_riwayat(&conn, None, 10, 0).unwrap();
         assert_eq!(records.len(), 1);

@@ -1,5 +1,9 @@
 pub mod pragma;
 
+mod embedded {
+    refinery::embed_migrations!("migrations");
+}
+
 use rusqlite::Connection;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
@@ -23,10 +27,15 @@ impl Db {
         }
 
         // Open SQLite connection
-        let conn = Connection::open(path)?;
+        let mut conn = Connection::open(path)?;
 
         // Apply pragmas
         pragma::apply(&conn)?;
+
+        // Ensure runtime databases have the schema expected by commands.
+        embedded::migrations::runner()
+            .run(&mut conn)
+            .map_err(|err| crate::error::AppError::Internal(err.to_string()))?;
 
         Ok(Self {
             conn: Arc::new(Mutex::new(conn)),

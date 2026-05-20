@@ -112,6 +112,18 @@ export default function BuatFormulirClient() {
     setStep((prev) => Math.max(1, prev - 1) as WizardStep);
   };
 
+  const clearError = (key: string) => {
+    setErrors((current) => {
+      if (!current[key]) {
+        return current;
+      }
+
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
+  };
+
   const generatePreview = () => {
     // TODO: Call Tauri command to render template
     // Placeholder HTML
@@ -208,6 +220,7 @@ export default function BuatFormulirClient() {
                 selectedSubjects={subjects}
                 errors={errors}
                 onSubjectChange={(kode, subject) => {
+                  clearError(`subject_${kode}`);
                   if (subject) {
                     setSubjects({ ...subjects, [kode]: subject });
                   } else {
@@ -227,7 +240,14 @@ export default function BuatFormulirClient() {
                 fields={schema.field}
                 subjects={schema.subjek}
                 values={fieldValues}
-                onChange={setFieldValues}
+                onChange={(values) => {
+                  for (const key of Object.keys(values)) {
+                    if (values[key] !== fieldValues[key]) {
+                      clearError(key);
+                    }
+                  }
+                  setFieldValues(values);
+                }}
                 errors={errors}
               />
             </div>
