@@ -3,6 +3,7 @@ mod auth;
 mod db;
 mod error;
 mod paths;
+mod service;
 
 fn main() {
     tauri::Builder::default()

@@ -1,0 +1,49 @@
+{
+  "alasan_pindah": [
+    { "kode": "1", "nilai": "Pekerjaan" },
+    { "kode": "2", "nilai": "Pendidikan" },
+    { "kode": "3", "nilai": "Keamanan" },
+    { "kode": "4", "nilai": "Kesehatan" },
+    { "kode": "5", "nilai": "Perumahan" },
+    { "kode": "6", "nilai": "Keluarga" },
+    { "kode": "7", "nilai": "Lainnya" }
+  ],
+  "klasifikasi_pindah": [
+    { "kode": "1", "nilai": "Dalam satu Desa/Kelurahan" },
+    { "kode": "2", "nilai": "Antar Desa/Kelurahan" },
+    { "kode": "3", "nilai": "Antar Kecamatan" },
+    { "kode": "4", "nilai": "Antar Kab/Kota" },
+    { "kode": "5", "nilai": "Antar Provinsi" }
+  ],
+  "jenis_kepindahan": [
+    { "kode": "1", "nilai": "Kep. Keluarga" },
+    { "kode": "2", "nilai": "Kep. Keluarga dan Seluruh Angg. Keluarga" },
+    { "kode": "3", "nilai": "Kep. Keluarga dan Sbg. Angg. Keluarga" },
+    { "kode": "4", "nilai": "Angg. Keluarga" }
+  ],
+  "status_kk_pindah": [
+    { "kode": "1", "nilai": "Numpang KK" },
+    { "kode": "2", "nilai": "Membuat KK Baru" },
+    { "kode": "3", "nilai": "Nomor KK Tetap" }
+  ],
+  "status_kk_tidak_pindah": [
+    { "kode": "1", "nilai": "Numpang KK" },
+    { "kode": "2", "nilai": "Membuat KK Baru" },
+    { "kode": "3", "nilai": "Tidak Ada Angg. Keluarga Yang Ditinggal" },
+    { "kode": "4", "nilai": "Nomor KK Tetap" }
+  ],
+  "jenis_permohonan": [
+    { "kode": "1", "nilai": "Surat Keterangan Kependudukan" },
+    { "kode": "2", "nilai": "Surat Keterangan Pindah" },
+    { "kode": "3", "nilai": "Surat Keterangan Pindah Luar Negeri (SKPLN)" },
+    { "kode": "4", "nilai": "Surat Keterangan Tempat Tinggal (SKTT)" },
+    { "kode": "5", "nilai": "Bagi Orang Asing Tinggal Terbatas" }
+  ],
+  "tipe_sponsor": [
+    { "kode": "1", "nilai": "Organisasi Internasional" },
+    { "kode": "2", "nilai": "Perorangan" },
+    { "kode": "3", "nilai": "Pemerintah" },
+    { "kode": "4", "nilai": "Tanpa Sponsor" },
+    { "kode": "5", "nilai": "Perusahaan" }
+  ]
+}
