@@ -7,6 +7,7 @@ use crate::repo::riwayat::{
     commit_riwayat_formulir, get_riwayat_by_id, list_riwayat, CommitRiwayatPayload,
     CommitRiwayatResponse, RiwayatRecord,
 };
+use crate::service::pdf::{export_pdf, ExportPdfRequest, ExportPdfResponse};
 use tauri::State;
 
 #[tauri::command]
@@ -38,4 +39,12 @@ pub fn list_riwayat_cmd(
 pub fn get_riwayat_by_id_cmd(state: State<AppState>, id: i64) -> AppResult<Option<RiwayatRecord>> {
     let conn = state.db.lock();
     get_riwayat_by_id(&conn, id)
+}
+
+#[tauri::command]
+pub fn export_pdf_cmd(
+    state: State<AppState>,
+    request: ExportPdfRequest,
+) -> AppResult<ExportPdfResponse> {
+    export_pdf(&state.paths, request)
 }
