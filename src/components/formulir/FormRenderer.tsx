@@ -2,10 +2,10 @@
  * FormRenderer - Reusable form field renderer for wizard
  */
 
-"use client";
+'use client';
 
-import { useState } from "react";
-import type { FormField, FormSubject } from "@/types/formulir";
+import { useState } from 'react';
+import type { FormField, FormSubject } from '@/types/formulir';
 
 interface FormRendererProps {
   fields: FormField[];
@@ -15,25 +15,20 @@ interface FormRendererProps {
   errors?: Record<string, string>;
 }
 
-export function FormRenderer({
-  fields,
-  values,
-  onChange,
-  errors = {},
-}: FormRendererProps) {
+export function FormRenderer({ fields, values, onChange, errors = {} }: FormRendererProps) {
   const handleFieldChange = (kode: string, value: string) => {
     onChange({ ...values, [kode]: value });
   };
 
   const renderField = (field: FormField) => {
-    const value = values[field.kode] || "";
+    const value = values[field.kode] || '';
     const hasError = errors[field.kode];
-    const inputClass = `input input-bordered w-full ${hasError ? "input-error" : ""}`;
+    const inputClass = `input input-bordered w-full ${hasError ? 'input-error' : ''}`;
 
     switch (field.tipe) {
-      case "text":
-      case "email":
-      case "number":
+      case 'text':
+      case 'email':
+      case 'number':
         return (
           <input
             id={field.kode}
@@ -45,11 +40,11 @@ export function FormRenderer({
           />
         );
 
-      case "textarea":
+      case 'textarea':
         return (
           <textarea
             id={field.kode}
-            className={`textarea textarea-bordered w-full ${hasError ? "textarea-error" : ""}`}
+            className={`textarea textarea-bordered w-full ${hasError ? 'textarea-error' : ''}`}
             value={value}
             onChange={(e) => handleFieldChange(field.kode, e.target.value)}
             required={field.wajib}
@@ -57,7 +52,7 @@ export function FormRenderer({
           />
         );
 
-      case "date":
+      case 'date':
         return (
           <input
             id={field.kode}
@@ -69,12 +64,12 @@ export function FormRenderer({
           />
         );
 
-      case "select":
+      case 'select':
         // Placeholder for select - opsi_ref would be resolved from backend
         return (
           <select
             id={field.kode}
-            className={`select select-bordered w-full ${hasError ? "select-error" : ""}`}
+            className={`select select-bordered w-full ${hasError ? 'select-error' : ''}`}
             value={value}
             onChange={(e) => handleFieldChange(field.kode, e.target.value)}
             required={field.wajib}
@@ -124,10 +119,7 @@ export function FormRenderer({
 interface SubjectSelectorProps {
   subjects: FormSubject[];
   selectedSubjects: Record<string, { nik: string; nama: string }>;
-  onSubjectChange: (
-    kode: string,
-    subject: { nik: string; nama: string } | null
-  ) => void;
+  onSubjectChange: (kode: string, subject: { nik: string; nama: string } | null) => void;
 }
 
 export function SubjectSelector({
@@ -165,13 +157,13 @@ export function SubjectSelector({
                 {subject.wajib && <span className="text-error ml-1">*</span>}
               </h3>
 
-              {subject.sumber === "warga" && (
+              {subject.sumber === 'penduduk' && (
                 <div className="space-y-2">
                   <input
                     type="text"
                     placeholder="Cari NIK atau nama warga..."
-                    className={`input input-bordered w-full ${hasError ? "input-error" : ""}`}
-                    value={searchTerms[subject.kode] || ""}
+                    className={`input input-bordered w-full ${hasError ? 'input-error' : ''}`}
+                    value={searchTerms[subject.kode] || ''}
                     onChange={(e) => handleSearch(subject.kode, e.target.value)}
                   />
                   {/* Search results would appear here */}
@@ -183,27 +175,19 @@ export function SubjectSelector({
                 <input
                   type="text"
                   placeholder="NIK"
-                  className={`input input-bordered input-sm ${hasError ? "input-error" : ""}`}
-                  value={selected?.nik || ""}
+                  className={`input input-bordered input-sm ${hasError ? 'input-error' : ''}`}
+                  value={selected?.nik || ''}
                   onChange={(e) =>
-                    handleManualInput(
-                      subject.kode,
-                      e.target.value,
-                      selected?.nama || ""
-                    )
+                    handleManualInput(subject.kode, e.target.value, selected?.nama || '')
                   }
                 />
                 <input
                   type="text"
                   placeholder="Nama"
-                  className={`input input-bordered input-sm ${hasError ? "input-error" : ""}`}
-                  value={selected?.nama || ""}
+                  className={`input input-bordered input-sm ${hasError ? 'input-error' : ''}`}
+                  value={selected?.nama || ''}
                   onChange={(e) =>
-                    handleManualInput(
-                      subject.kode,
-                      selected?.nik || "",
-                      e.target.value
-                    )
+                    handleManualInput(subject.kode, selected?.nik || '', e.target.value)
                   }
                 />
               </div>
