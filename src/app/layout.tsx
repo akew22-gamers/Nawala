@@ -6,11 +6,7 @@ export const metadata: Metadata = {
   description: 'Aplikasi Surat Adminduk Desa',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" data-theme="light">
       <body>{children}</body>
