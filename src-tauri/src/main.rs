@@ -1,8 +1,10 @@
 mod app;
 mod auth;
+mod commands;
 mod db;
 mod error;
 mod paths;
+mod repo;
 mod service;
 
 fn main() {

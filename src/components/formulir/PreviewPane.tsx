@@ -1,0 +1,18 @@
+/**
+ * PreviewPane - Sandboxed iframe for form preview
+ */
+
+interface PreviewPaneProps {
+  html: string;
+}
+
+export function PreviewPane({ html }: PreviewPaneProps) {
+  return (
+    <iframe
+      className="h-[80vh] w-full rounded-box border border-base-300 bg-white"
+      srcDoc={html}
+      title="Preview formulir"
+      sandbox="allow-same-origin"
+    />
+  );
+}

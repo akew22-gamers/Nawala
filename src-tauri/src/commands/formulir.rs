@@ -1,0 +1,40 @@
+/**
+ * Tauri commands for formulir operations
+ */
+
+use crate::app::AppState;
+use crate::error::AppResult;
+use crate::repo::riwayat::{
+    commit_riwayat_formulir, get_riwayat_by_id, list_riwayat, CommitRiwayatPayload,
+    CommitRiwayatResponse, RiwayatRecord,
+};
+use tauri::State;
+
+#[tauri::command]
+pub fn commit_riwayat_formulir_cmd(
+    state: State<AppState>,
+    payload: CommitRiwayatPayload,
+) -> AppResult<CommitRiwayatResponse> {
+    let conn = state.db.lock();
+    commit_riwayat_formulir(&conn, payload)
+}
+
+#[tauri::command]
+pub fn list_riwayat_cmd(
+    state: State<AppState>,
+    kode_formulir: Option<String>,
+    limit: Option<i32>,
+    offset: Option<i32>,
+) -> AppResult<Vec<RiwayatRecord>> {
+    let conn = state.db.lock();
+    list_riwayat(&conn, kode_formulir, limit.unwrap_or(50), offset.unwrap_or(0))
+}
+
+#[tauri::command]
+pub fn get_riwayat_by_id_cmd(
+    state: State<AppState>,
+    id: i64,
+) -> AppResult<Option<RiwayatRecord>> {
+    let conn = state.db.lock();
+    get_riwayat_by_id(&conn, id)
+}
