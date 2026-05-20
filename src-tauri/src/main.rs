@@ -1,3 +1,8 @@
+mod app;
+mod db;
+mod error;
+mod paths;
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
