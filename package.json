@@ -1,0 +1,45 @@
+{
+  "name": "nawala",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nawala - Aplikasi Surat Adminduk Desa",
+  "author": "EAS Creative Studio <dev@eas.biz.id>",
+  "homepage": "https://eas.biz.id",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@tauri-apps/api": "^2.11.0",
+    "@tanstack/react-query": "^5.100.11",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.13.24",
+    "daisyui": "^5.5.20",
+    "handlebars": "^4.7.9",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-hook-form": "^7.76.0",
+    "xlsx": "^0.18.5",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@tauri-apps/cli": "^2.11.2",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  }
+}

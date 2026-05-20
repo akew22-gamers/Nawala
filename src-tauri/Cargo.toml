@@ -1,0 +1,25 @@
+[package]
+name = "nawala"
+version = "0.1.0"
+description = "Nawala - Aplikasi Surat Adminduk Desa"
+authors = ["EAS Creative Studio <dev@eas.biz.id>"]
+license = "MIT"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+chrono = { version = "0.4", features = ["serde"] }
+rusqlite = { version = "0.32", features = ["bundled", "chrono"] }
+refinery = { version = "0.8", features = ["rusqlite"] }
+argon2 = "0.5"
+rand_core = "0.6"
+strsim = "0.11"
+sha2 = "0.10"
+base64 = "0.22"
