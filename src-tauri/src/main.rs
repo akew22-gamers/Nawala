@@ -22,6 +22,10 @@ fn main() {
         .plugin(tauri_plugin_shell::init())
         .manage(AppState { db, paths })
         .invoke_handler(tauri::generate_handler![
+            commands::audit::list_audit_logs_cmd,
+            commands::backup::create_manual_backup_cmd,
+            commands::backup::restore_backup_cmd,
+            commands::backup::list_backup_logs_cmd,
             commands::formulir::commit_riwayat_formulir_cmd,
             commands::formulir::list_riwayat_cmd,
             commands::formulir::get_riwayat_by_id_cmd,
