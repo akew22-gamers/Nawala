@@ -26,7 +26,7 @@ impl Db {
         let conn = Connection::open(path)?;
 
         // Apply pragmas
-        pragma::apply_pragmas(&conn)?;
+        pragma::apply(&conn)?;
 
         Ok(Self {
             conn: Arc::new(Mutex::new(conn)),
@@ -34,7 +34,7 @@ impl Db {
     }
 
     /// Get a lock on the connection for executing queries
-    pub fn lock(&self) -> std::sync::MutexGuard<Connection> {
+    pub fn lock(&self) -> std::sync::MutexGuard<'_, Connection> {
         self.conn.lock().unwrap()
     }
 }

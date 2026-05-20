@@ -1,15 +1,9 @@
 use rusqlite::Connection;
 
-use crate::error::AppResult;
-
 /// Apply SQLite pragmas for optimal performance and safety
-pub fn apply_pragmas(conn: &Connection) -> AppResult<()> {
-    conn.execute_batch(
-        "
-        PRAGMA journal_mode = WAL;
-        PRAGMA foreign_keys = ON;
-        PRAGMA synchronous = NORMAL;
-        ",
-    )?;
+pub fn apply(conn: &Connection) -> rusqlite::Result<()> {
+    conn.pragma_update(None, "journal_mode", "WAL")?;
+    conn.pragma_update(None, "foreign_keys", "ON")?;
+    conn.pragma_update(None, "synchronous", "NORMAL")?;
     Ok(())
 }
