@@ -1,7 +1,6 @@
 /**
  * Repository module for riwayat_formulir operations
  */
-
 use crate::error::AppResult;
 use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
@@ -119,28 +118,29 @@ pub fn list_riwayat(
     limit: i32,
     offset: i32,
 ) -> AppResult<Vec<RiwayatRecord>> {
-    let (sql, params_vec): (&str, Vec<Box<dyn rusqlite::ToSql>>) = if let Some(ref kode) = kode_formulir {
-        (
-            "SELECT id, kode_formulir, nomor_surat, tanggal_terbit, dibuat_oleh, created_at
+    let (sql, params_vec): (&str, Vec<Box<dyn rusqlite::ToSql>>) =
+        if let Some(ref kode) = kode_formulir {
+            (
+                "SELECT id, kode_formulir, nomor_surat, tanggal_terbit, dibuat_oleh, created_at
              FROM riwayat_formulir
              WHERE kode_formulir = ?1
              ORDER BY created_at DESC
              LIMIT ?2 OFFSET ?3",
-            vec![Box::new(kode.clone()), Box::new(limit), Box::new(offset)],
-        )
-    } else {
-        (
-            "SELECT id, kode_formulir, nomor_surat, tanggal_terbit, dibuat_oleh, created_at
+                vec![Box::new(kode.clone()), Box::new(limit), Box::new(offset)],
+            )
+        } else {
+            (
+                "SELECT id, kode_formulir, nomor_surat, tanggal_terbit, dibuat_oleh, created_at
              FROM riwayat_formulir
              ORDER BY created_at DESC
              LIMIT ?1 OFFSET ?2",
-            vec![Box::new(limit), Box::new(offset)],
-        )
-    };
+                vec![Box::new(limit), Box::new(offset)],
+            )
+        };
 
     let mut stmt = conn.prepare(sql)?;
     let params_refs: Vec<&dyn rusqlite::ToSql> = params_vec.iter().map(|b| b.as_ref()).collect();
-    
+
     let rows = stmt.query_map(params_refs.as_slice(), |row| {
         Ok(RiwayatRecord {
             id: row.get(0)?,
@@ -193,7 +193,7 @@ mod tests {
 
     fn setup_test_db() -> Connection {
         let conn = Connection::open_in_memory().unwrap();
-        
+
         // Create minimal schema for testing
         conn.execute(
             "CREATE TABLE riwayat_formulir (

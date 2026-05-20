@@ -1,7 +1,6 @@
 /**
  * Tauri commands for formulir operations
  */
-
 use crate::app::AppState;
 use crate::error::AppResult;
 use crate::repo::riwayat::{
@@ -27,14 +26,16 @@ pub fn list_riwayat_cmd(
     offset: Option<i32>,
 ) -> AppResult<Vec<RiwayatRecord>> {
     let conn = state.db.lock();
-    list_riwayat(&conn, kode_formulir, limit.unwrap_or(50), offset.unwrap_or(0))
+    list_riwayat(
+        &conn,
+        kode_formulir,
+        limit.unwrap_or(50),
+        offset.unwrap_or(0),
+    )
 }
 
 #[tauri::command]
-pub fn get_riwayat_by_id_cmd(
-    state: State<AppState>,
-    id: i64,
-) -> AppResult<Option<RiwayatRecord>> {
+pub fn get_riwayat_by_id_cmd(state: State<AppState>, id: i64) -> AppResult<Option<RiwayatRecord>> {
     let conn = state.db.lock();
     get_riwayat_by_id(&conn, id)
 }
