@@ -1,10 +1,10 @@
-export interface NomorContext {
+export type NomorContext = {
   seq: number;
   kode: string;
   kodeDesa: string;
   tanggal: Date;
   custom?: Record<string, string>;
-}
+};
 
 const ROMAWI = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
@@ -35,7 +35,7 @@ export function renderNomorSurat(pattern: string, context: NomorContext): string
 
   // Replace {custom:KEY}
   if (context.custom) {
-    result = result.replace(/\{custom:(\w+)\}/g, (_, key) => {
+    result = result.replace(/\{custom:([A-Z0-9_]+)\}/g, (_, key: string) => {
       return context.custom?.[key] ?? '';
     });
   }
