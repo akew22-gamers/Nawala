@@ -150,7 +150,7 @@ export function SubjectSelector({
       {subjects.map((subject) => {
         const selected = selectedSubjects[subject.kode];
         const error = errors[`subject_${subject.kode}`];
-        const hasError = Boolean(error) || (subject.wajib && !selected);
+        const hasError = Boolean(error);
 
         return (
           <div key={subject.kode} className="card bg-base-200">
