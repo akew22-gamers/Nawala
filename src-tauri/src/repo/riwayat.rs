@@ -186,6 +186,18 @@ pub fn get_riwayat_by_id(conn: &Connection, id: i64) -> AppResult<Option<Riwayat
     }
 }
 
+pub fn update_riwayat_pdf_metadata(
+    conn: &Connection,
+    id: i64,
+    pdf_path: &str,
+    hash_dokumen: &str,
+) -> AppResult<usize> {
+    Ok(conn.execute(
+        "UPDATE riwayat_formulir SET pdf_path = ?1, hash_dokumen = ?2 WHERE id = ?3",
+        params![pdf_path, hash_dokumen, id],
+    )?)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -298,5 +310,45 @@ mod tests {
         let records = list_riwayat(&conn, None, 10, 0).unwrap();
         assert_eq!(records.len(), 1);
         assert_eq!(records[0].kode_formulir, "SKCK");
+    }
+
+    #[test]
+    fn update_riwayat_pdf_metadata_updates_path_and_hash_by_id() {
+        let mut conn = setup_test_db();
+        let payload = CommitRiwayatPayload {
+            kode_formulir: "SKCK".to_string(),
+            versi_template: 1,
+            nomor_surat: None,
+            tanggal_terbit: "2026-05-20".to_string(),
+            pejabat_id: None,
+            pejabat_snapshot: "{}".to_string(),
+            data_snapshot: "{}".to_string(),
+            template_snapshot: "{}".to_string(),
+            pdf_path: None,
+            hash_dokumen: None,
+            catatan: None,
+            dibuat_oleh: "admin".to_string(),
+            subjek: vec![],
+        };
+        let created = commit_riwayat_formulir(&mut conn, payload).unwrap();
+
+        let updated = update_riwayat_pdf_metadata(
+            &conn,
+            created.riwayat_id,
+            "exports/surat-test.pdf",
+            "abc123",
+        )
+        .unwrap();
+
+        assert_eq!(updated, 1);
+        let stored: (Option<String>, Option<String>) = conn
+            .query_row(
+                "SELECT pdf_path, hash_dokumen FROM riwayat_formulir WHERE id = ?1",
+                params![created.riwayat_id],
+                |row| Ok((row.get(0)?, row.get(1)?)),
+            )
+            .unwrap();
+        assert_eq!(stored.0.as_deref(), Some("exports/surat-test.pdf"));
+        assert_eq!(stored.1.as_deref(), Some("abc123"));
     }
 }

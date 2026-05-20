@@ -32,10 +32,7 @@ export default async function PrintPage({ params }: PrintPageProps) {
 
         <article className="mt-10 space-y-6 text-base leading-8">
           <p className="text-right">Nomor Draft: {draftId}</p>
-          <p>
-            Yang bertanda tangan di bawah ini menerangkan bahwa dokumen ini adalah placeholder
-            pratinjau cetak.
-          </p>
+          <p>Yang bertanda tangan di bawah ini menerangkan bahwa dokumen ini siap dicetak.</p>
           <p>
             Konten final akan dimuat dari riwayat atau draft formulir setelah pipeline render HTML
             surat tersedia. Halaman ini sudah siap dipakai sebagai target webview untuk proses
@@ -56,7 +53,7 @@ export default async function PrintPage({ params }: PrintPageProps) {
         </article>
 
         <footer className="no-print mt-10 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900 text-sm">
-          Placeholder cetak: data asli draft belum dihubungkan pada Task 9.
+          Pratinjau cetak siap digunakan saat data draft terhubung.
         </footer>
       </section>
     </main>

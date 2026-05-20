@@ -4,8 +4,8 @@
 use crate::app::AppState;
 use crate::error::AppResult;
 use crate::repo::riwayat::{
-    commit_riwayat_formulir, get_riwayat_by_id, list_riwayat, CommitRiwayatPayload,
-    CommitRiwayatResponse, RiwayatRecord,
+    commit_riwayat_formulir, get_riwayat_by_id, list_riwayat, update_riwayat_pdf_metadata,
+    CommitRiwayatPayload, CommitRiwayatResponse, RiwayatRecord,
 };
 use crate::service::pdf::{export_pdf, ExportPdfRequest, ExportPdfResponse};
 use tauri::State;
@@ -46,5 +46,18 @@ pub fn export_pdf_cmd(
     state: State<AppState>,
     request: ExportPdfRequest,
 ) -> AppResult<ExportPdfResponse> {
-    export_pdf(&state.paths, request)
+    let draft_id = request.draft_id.clone();
+    let response = export_pdf(&state.paths, request)?;
+
+    if let Ok(riwayat_id) = draft_id.parse::<i64>() {
+        let conn = state.db.lock();
+        update_riwayat_pdf_metadata(
+            &conn,
+            riwayat_id,
+            &response.relative_path,
+            &response.hash_sha256,
+        )?;
+    }
+
+    Ok(response)
 }
