@@ -89,13 +89,25 @@ mod tests {
 
         let source = temp_dir.join("nawala.db");
         let destination = temp_dir.join("backup.db");
-        fs::write(&source, b"sqlite content").unwrap();
+        {
+            let conn = Connection::open(&source).unwrap();
+            conn.execute("CREATE TABLE sample (id INTEGER PRIMARY KEY)", [])
+                .unwrap();
+            conn.execute("INSERT INTO sample (id) VALUES (1)", [])
+                .unwrap();
+        }
 
         let result = copy_backup(&source, &destination).unwrap();
 
         assert!(destination.exists());
         assert_eq!(result.destination, destination);
         assert!(!result.sha256.is_empty());
+
+        let copied = Connection::open(temp_dir.join("backup.db")).unwrap();
+        let integrity: String = copied
+            .query_row("PRAGMA integrity_check", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(integrity, "ok");
 
         fs::remove_dir_all(&temp_dir).unwrap();
     }

@@ -3,6 +3,7 @@ use crate::error::AppResult;
 use crate::repo::audit::{insert_audit_log, AuditLogPayload};
 use crate::repo::backup::{insert_backup_log, list_backup_logs, BackupLogRecord};
 use crate::service::backup::{copy_backup, restore_backup};
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::path::PathBuf;
@@ -71,9 +72,9 @@ pub fn restore_backup_cmd(
     )?;
     let path = pre_restore.destination.to_string_lossy().to_string();
 
-    let conn = state.db.lock();
+    let restored_conn = Connection::open(&state.paths.db_path)?;
     let backup_log_id = insert_backup_log(
-        &conn,
+        &restored_conn,
         "pre-restore",
         &path,
         pre_restore.size_bytes,
@@ -81,7 +82,7 @@ pub fn restore_backup_cmd(
         Some("Backup otomatis sebelum restore"),
     )?;
     insert_audit_log(
-        &conn,
+        &restored_conn,
         AuditLogPayload {
             aksi: "restore_backup".to_string(),
             entitas: Some("backup_log".to_string()),
