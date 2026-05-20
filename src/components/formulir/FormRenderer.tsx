@@ -119,12 +119,14 @@ export function FormRenderer({ fields, values, onChange, errors = {} }: FormRend
 interface SubjectSelectorProps {
   subjects: FormSubject[];
   selectedSubjects: Record<string, { nik: string; nama: string }>;
+  errors?: Record<string, string>;
   onSubjectChange: (kode: string, subject: { nik: string; nama: string } | null) => void;
 }
 
 export function SubjectSelector({
   subjects,
   selectedSubjects,
+  errors = {},
   onSubjectChange,
 }: SubjectSelectorProps) {
   const [searchTerms, setSearchTerms] = useState<Record<string, string>>({});
@@ -147,7 +149,8 @@ export function SubjectSelector({
     <div className="space-y-6">
       {subjects.map((subject) => {
         const selected = selectedSubjects[subject.kode];
-        const hasError = subject.wajib && !selected;
+        const error = errors[`subject_${subject.kode}`];
+        const hasError = Boolean(error) || (subject.wajib && !selected);
 
         return (
           <div key={subject.kode} className="card bg-base-200">
@@ -202,7 +205,7 @@ export function SubjectSelector({
 
               {hasError && (
                 <div className="alert alert-error mt-2">
-                  <span>Subjek ini wajib diisi</span>
+                  <span>{error || 'Subjek ini wajib diisi'}</span>
                 </div>
               )}
             </div>

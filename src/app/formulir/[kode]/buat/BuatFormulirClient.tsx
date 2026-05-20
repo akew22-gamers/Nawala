@@ -206,6 +206,7 @@ export default function BuatFormulirClient() {
               <SubjectSelector
                 subjects={schema.subjek}
                 selectedSubjects={subjects}
+                errors={errors}
                 onSubjectChange={(kode, subject) => {
                   if (subject) {
                     setSubjects({ ...subjects, [kode]: subject });
