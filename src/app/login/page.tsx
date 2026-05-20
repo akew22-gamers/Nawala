@@ -21,52 +21,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Nawala</h1>
-          <p className="mt-2 text-sm text-gray-600">Aplikasi Surat Adminduk Desa</p>
-        </div>
+    <main className="grid min-h-screen place-items-center bg-base-200 p-4">
+      <section className="card w-full max-w-md bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h1 className="card-title text-3xl">Nawala</h1>
+          <p className="text-base-content/70">Masuk untuk mengelola surat adminduk desa.</p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
+          <form onSubmit={handleSubmit} className="mt-4 grid gap-3">
+            <label className="form-control" htmlFor="password">
+              <span className="label-text">Password</span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input input-bordered mt-1"
+                placeholder="PIN atau password"
+              />
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Masukkan password"
-            />
-          </div>
 
-          {error && <div className="text-red-600 text-sm">{error}</div>}
+            {error && <p className="text-sm text-error">{error}</p>}
 
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Masuk
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary mt-2">
+              Masuk
+            </button>
+          </form>
 
-        <div className="text-center text-xs text-gray-500 mt-8">
-          <p>EAS Creative Studio</p>
-          <a
-            href="https://eas.biz.id"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800"
-          >
-            https://eas.biz.id
-          </a>
+          <p className="mt-6 text-center text-xs text-base-content/50">
+            EAS Creative Studio - https://eas.biz.id
+          </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
