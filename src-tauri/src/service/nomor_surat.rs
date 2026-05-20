@@ -8,7 +8,7 @@ pub const DEFAULT_PATTERN: &str = "{seq:4}/{kode}/{kode_desa}/{romawi:bulan}/{ta
 /// Roman numerals for months (1-12).
 #[allow(dead_code)]
 pub const ROMAWI: [&str; 13] = [
-    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"
+    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII",
 ];
 
 #[cfg(test)]
