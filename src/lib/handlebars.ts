@@ -3,8 +3,16 @@ import Handlebars from 'handlebars';
 /**
  * Register custom Handlebars helper for Indonesian date formatting
  */
-Handlebars.registerHelper('tgl_indo', (value: string) => {
+Handlebars.registerHelper('tgl_indo', (value: unknown) => {
+  if (!value || typeof value !== 'string') {
+    return '';
+  }
+
   const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
   return new Intl.DateTimeFormat('id-ID', {
     day: '2-digit',
     month: 'long',

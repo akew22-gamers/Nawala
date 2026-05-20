@@ -64,4 +64,13 @@ describe('renderTemplate', () => {
     expect(renderTemplate(template, { date: '2026-02-28' })).toContain('28 Februari 2026');
     expect(renderTemplate(template, { date: '2026-12-31' })).toContain('31 Desember 2026');
   });
+
+  it('renders invalid or missing dates as empty strings', () => {
+    const template = 'Tanggal: {{tgl_indo date}}';
+
+    expect(renderTemplate(template, { date: 'tanggal-rusak' })).toBe('Tanggal: ');
+    expect(renderTemplate(template, { date: '' })).toBe('Tanggal: ');
+    expect(renderTemplate(template, { date: null })).toBe('Tanggal: ');
+    expect(renderTemplate(template, {})).toBe('Tanggal: ');
+  });
 });
