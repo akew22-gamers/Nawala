@@ -2,6 +2,7 @@ use crate::error::{AppError, AppResult};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct ImportedPenduduk {
     pub no_kk: String,
     pub nik: String,
@@ -22,14 +23,17 @@ pub struct ImportedPenduduk {
     pub keterangan: String,
 }
 
+#[allow(dead_code)]
 pub fn parse_buku_induk_csv(input: &str) -> AppResult<Vec<ImportedPenduduk>> {
-    let mut lines = input.lines();
-    
-    // Parse header
-    let header = lines.next()
-        .ok_or_else(|| AppError::Validation("Empty CSV file".to_string()))?;
-    let headers: Vec<&str> = header.split(',').collect();
-    
+    let mut reader = csv::ReaderBuilder::new()
+        .flexible(true)
+        .trim(csv::Trim::All)
+        .from_reader(input.as_bytes());
+    let headers = reader
+        .headers()
+        .map_err(|err| AppError::Validation(format!("Invalid CSV header: {err}")))?
+        .clone();
+
     // Find column indices
     let idx_no_kk = find_column(&headers, "NOMOR KK")?;
     let idx_nik = find_column(&headers, "NIK")?;
@@ -48,23 +52,19 @@ pub fn parse_buku_induk_csv(input: &str) -> AppResult<Vec<ImportedPenduduk>> {
     let idx_rt = find_column(&headers, "RT")?;
     let idx_rw = find_column(&headers, "RW")?;
     let idx_ket = find_column(&headers, "KET")?;
-    
+
     let mut results = Vec::new();
-    
-    for line in lines {
-        if line.trim().is_empty() {
-            continue;
-        }
-        
-        let fields: Vec<&str> = line.split(',').collect();
-        
+
+    for record in reader.records() {
+        let fields =
+            record.map_err(|err| AppError::Validation(format!("Invalid CSV record: {err}")))?;
         let no_kk = get_field(&fields, idx_no_kk)?;
         let nik = get_field(&fields, idx_nik)?;
-        
+
         // Validate NIK and No KK as 16 ASCII digits
         validate_16_digits(nik, "NIK")?;
         validate_16_digits(no_kk, "No KK")?;
-        
+
         results.push(ImportedPenduduk {
             no_kk: no_kk.to_string(),
             nik: nik.to_string(),
@@ -85,35 +85,40 @@ pub fn parse_buku_induk_csv(input: &str) -> AppResult<Vec<ImportedPenduduk>> {
             keterangan: get_field(&fields, idx_ket)?.to_string(),
         });
     }
-    
+
     Ok(results)
 }
 
-fn find_column(headers: &[&str], name: &str) -> AppResult<usize> {
-    headers.iter()
-        .position(|&h| h == name)
+fn find_column(headers: &csv::StringRecord, name: &str) -> AppResult<usize> {
+    headers
+        .iter()
+        .position(|h| h.trim() == name)
         .ok_or_else(|| AppError::Validation(format!("Column '{}' not found", name)))
 }
 
-fn get_field<'a>(fields: &'a [&'a str], index: usize) -> AppResult<&'a str> {
-    fields.get(index)
+fn get_field(fields: &csv::StringRecord, index: usize) -> AppResult<&str> {
+    fields
+        .get(index)
         .ok_or_else(|| AppError::Validation(format!("Missing field at index {}", index)))
-        .map(|s| *s)
+        .map(str::trim)
 }
 
 fn validate_16_digits(value: &str, field_name: &str) -> AppResult<()> {
     if value.len() != 16 {
-        return Err(AppError::Validation(
-            format!("{} must be exactly 16 digits, got {} characters", field_name, value.len())
-        ));
+        return Err(AppError::Validation(format!(
+            "{} must be exactly 16 digits, got {} characters",
+            field_name,
+            value.len()
+        )));
     }
-    
+
     if !value.chars().all(|c| c.is_ascii_digit()) {
-        return Err(AppError::Validation(
-            format!("{} must contain only digits", field_name)
-        ));
+        return Err(AppError::Validation(format!(
+            "{} must contain only digits",
+            field_name
+        )));
     }
-    
+
     Ok(())
 }
 

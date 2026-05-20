@@ -28,14 +28,15 @@ export default function ImportReview({ rows }: ImportReviewProps) {
 
       <div className="overflow-x-auto">
         <table className="table table-zebra">
+          <caption className="sr-only">Preview hasil import data warga dari Buku Induk</caption>
           <thead>
             <tr>
-              <th>Row</th>
-              <th>NIK</th>
-              <th>No KK</th>
-              <th>Nama</th>
-              <th>Status</th>
-              <th>Message</th>
+              <th scope="col">Row</th>
+              <th scope="col">NIK</th>
+              <th scope="col">No KK</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Status</th>
+              <th scope="col">Message</th>
             </tr>
           </thead>
           <tbody>

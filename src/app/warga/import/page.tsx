@@ -39,11 +39,10 @@ export default function ImportWargaPage() {
       <div className="card bg-base-100 shadow-xl mb-6">
         <div className="card-body">
           <h2 className="card-title">Upload File</h2>
-          <input
-            type="file"
-            accept=".csv"
-            className="file-input file-input-bordered w-full max-w-xs"
-          />
+          <label className="form-control w-full max-w-xs">
+            <span className="label-text">File Buku Induk CSV</span>
+            <input type="file" accept=".csv" className="file-input file-input-bordered w-full" />
+          </label>
           <div className="card-actions justify-end mt-4">
             <button type="button" className="btn btn-primary">
               Proses Import
