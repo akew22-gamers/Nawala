@@ -102,6 +102,8 @@ mod tests {
         assert!(destination.exists());
         assert_eq!(result.destination, destination);
         assert!(!result.sha256.is_empty());
+        assert_eq!(result.sha256, hash_file(&result.destination).unwrap());
+        assert_eq!(result.sha256, hash_file(&source).unwrap());
 
         let copied = Connection::open(temp_dir.join("backup.db")).unwrap();
         let integrity: String = copied
