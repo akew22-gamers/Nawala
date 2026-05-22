@@ -3,12 +3,30 @@
  */
 use crate::app::AppState;
 use crate::error::AppResult;
+use crate::repo::formulir as formulir_repo;
 use crate::repo::riwayat::{
     commit_riwayat_formulir, get_riwayat_by_id, list_riwayat, update_riwayat_pdf_metadata,
     CommitRiwayatPayload, CommitRiwayatResponse, RiwayatRecord,
 };
 use crate::service::pdf::{export_pdf, ExportPdfRequest, ExportPdfResponse};
 use tauri::State;
+
+#[tauri::command]
+pub fn list_formulir_def_cmd(
+    state: State<AppState>,
+) -> AppResult<Vec<formulir_repo::FormulirDefRecord>> {
+    let conn = state.db.lock();
+    formulir_repo::list_formulir_def(&conn)
+}
+
+#[tauri::command]
+pub fn get_formulir_def_cmd(
+    state: State<AppState>,
+    kode: String,
+) -> AppResult<Option<formulir_repo::FormulirDefRecord>> {
+    let conn = state.db.lock();
+    formulir_repo::get_formulir_def(&conn, &kode)
+}
 
 #[tauri::command]
 pub fn commit_riwayat_formulir_cmd(

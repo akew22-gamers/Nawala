@@ -1,17 +1,14 @@
-/**
- * Formulir List Page - Browse available forms
- */
-
 'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { listFormulirDef } from '@/lib/tauri';
 
 interface FormulirItem {
   kode: string;
   nama: string;
   kategori: string;
-  deskripsi?: string;
+  deskripsi?: string | null;
 }
 
 export default function FormulirPage() {
@@ -20,29 +17,39 @@ export default function FormulirPage() {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    // TODO: Load from Tauri command
-    // Placeholder data
-    setFormulirs([
-      {
-        kode: 'SKCK',
-        nama: 'Surat Keterangan Catatan Kepolisian',
-        kategori: 'Keterangan',
-        deskripsi: 'Surat pengantar SKCK',
-      },
-      {
-        kode: 'SKTM',
-        nama: 'Surat Keterangan Tidak Mampu',
-        kategori: 'Keterangan',
-        deskripsi: 'Surat keterangan ekonomi tidak mampu',
-      },
-    ]);
-    setLoading(false);
+    listFormulirDef()
+      .then((items) => {
+        setFormulirs(
+          items.map((f) => ({
+            kode: f.kode,
+            nama: f.nama,
+            kategori: f.kategori,
+            deskripsi: f.deskripsi,
+          })),
+        );
+        setLoading(false);
+      })
+      .catch(() => {
+        // Fallback for non-Tauri context (SSG build)
+        setFormulirs([]);
+        setLoading(false);
+      });
   }, []);
 
   const filteredFormulirs = formulirs.filter(
     (f) =>
       f.nama.toLowerCase().includes(filter.toLowerCase()) ||
       f.kode.toLowerCase().includes(filter.toLowerCase()),
+  );
+
+  // Group by kategori
+  const grouped = filteredFormulirs.reduce(
+    (acc, f) => {
+      if (!acc[f.kategori]) acc[f.kategori] = [];
+      acc[f.kategori].push(f);
+      return acc;
+    },
+    {} as Record<string, FormulirItem[]>,
   );
 
   if (loading) {
@@ -67,31 +74,45 @@ export default function FormulirPage() {
           className="input input-bordered w-full max-w-md"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
+          aria-label="Cari formulir"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredFormulirs.map((formulir) => (
-          <Link
-            key={formulir.kode}
-            href={`/formulir/${formulir.kode}/buat`}
-            className="card bg-base-200 hover:bg-base-300 transition-colors"
-          >
-            <div className="card-body">
-              <h2 className="card-title">{formulir.nama}</h2>
-              <p className="text-sm text-base-content/70">Kode: {formulir.kode}</p>
-              {formulir.deskripsi && <p className="text-sm">{formulir.deskripsi}</p>}
-              <div className="card-actions justify-end mt-2">
-                <span className="badge badge-primary">{formulir.kategori}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {formulirs.length === 0 && !loading && (
+        <div className="alert alert-info">
+          <span>Belum ada formulir tersedia. Pastikan aplikasi berjalan dalam konteks Tauri.</span>
+        </div>
+      )}
 
-      {filteredFormulirs.length === 0 && (
+      {Object.entries(grouped).map(([kategori, items]) => (
+        <div key={kategori} className="mb-6">
+          <h2 className="text-xl font-semibold mb-3 text-primary">{kategori}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map((formulir) => (
+              <Link
+                key={formulir.kode}
+                href={`/formulir/${formulir.kode}/buat`}
+                className="card bg-base-200 hover:bg-base-300 transition-colors"
+              >
+                <div className="card-body">
+                  <h3 className="card-title text-base">{formulir.nama}</h3>
+                  <p className="text-sm text-base-content/70">Kode: {formulir.kode}</p>
+                  {formulir.deskripsi && <p className="text-sm">{formulir.deskripsi}</p>}
+                  <div className="card-actions justify-end mt-2">
+                    <span className="badge badge-primary badge-sm">{formulir.kategori}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {filteredFormulirs.length === 0 && formulirs.length > 0 && (
         <div className="text-center py-12">
-          <p className="text-base-content/70">Tidak ada formulir ditemukan</p>
+          <p className="text-base-content/70">
+            Tidak ada formulir ditemukan untuk &quot;{filter}&quot;
+          </p>
         </div>
       )}
     </div>
